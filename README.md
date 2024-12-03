@@ -1,30 +1,58 @@
-This repository contains the pipeline to create dataset of proteins with known allosteric and active sites
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/djmaity/allobench/HEAD?labpath=AlloBench.ipynb)
 
-The code is in the notebooks directry and contains 4 Jupyter Python Notebooks. The Python packages used in the notebooks must be installed to succesfully run the notebooks. It is hihgly recommended to create a virtual environment with Anaconda or Miniconda. If not already intalled, install Anaconda or Miniconda following the instructions at https://docs.anaconda.com/anaconda/install/ and https://docs.anaconda.com/miniconda/miniconda-install/, respectively. Create the virtual environment with:
+# AlloBench
 
-conda create -n allostery
-conda activate allostery
+The AlloBench is a pipeline to create dataset of proteins with known allosteric and active sites.
 
-conda install --yes --file requirements.txt
+## Installation
+Install Python 3 and the required dependencies using either of the two methods below. It is highly recommended to create a virtual environment to avoid conflicts with existing packages on the computer.
 
+### Using Anaconda or Miniconda (Recommended)
+If not already intalled, install Anaconda or Miniconda following the instructions at https://docs.anaconda.com/anaconda/install/ and https://docs.anaconda.com/miniconda/miniconda-install/, respectively.
+
+Create the allostery virtual environment using the environment.yml file in the repository:
+
+```
+conda env create --file=environment.yml
+```
+
+### Using Python pip
+
+Python 3 comes preinstalled on Linux and macOS. If pip is not installed please refer the [PIP Documentation](https://pip.pypa.io/en/stable/installation/)
+```
+python3 -m venv allostery
+```
+```
 conda install pip
 pip install -r requirements.txt
-
+```
 The nootbooks require an internet connection to automatically obtain the required data in many of its cells. The output is written to the output directory of the repository. The input and output locations can be customized in the notebooks. Please refer to the text cells in each notebook for further instructions. 
 
-## 01_Clean_ASD_add_Active_Site_Residues.ipynb
-Cleans the data from AlloSteric Database (ASD) and fetches the active site information from UniProt and Mechanism and Catalytic Site Atlas (M-CSA).
-The final output of this notebook can be split into training, validation and test set for developing AI methods for allosteric site prediction.
+## Running AlloBench
+The AlloBench.ipynb Jupyter notebook contains the entire pipeline. An internet connection is required to run the notebook as it fetches data from UniProt and RCSB Protein Data Bank (PDB).
 
-Download the ASD_Release_202306_XF.tar.gz archive from https://mdl.shsmu.edu.cn/ASD/module/download/download.jsp?tabIndex=1 and extract it in the data directory of this repository before running the notbook so that the path is data/ASD_Release_202306_XF contain XML files
+### 1. Download AlloSteric Database (ASD) Data
+The data from ASD cannot be automatically fetched and must be manually downloaded after requesting access. Download the ASD_Release_202306_XF.tar.gz archive from from https://mdl.shsmu.edu.cn/ASD/module/download/download.jsp?tabIndex=1 and place it in the directory with the notebook. If using mybinder.org upload the file using 
 
-## 02_Compare_Training_Sets_of_Exisiting_Allosteric_Site_Prediction_Tools.ipynb
-Identifies the UniProt and PDB IDs of the proteins in the training sets of existing allosteric site prediction tools.
+### 2. Launch Jupyter Lab and open AlloBench.ipynb
+```
+conda activate allostery
+jupyter lab AlloBench.ipynb
+```
 
-## 03_Create_Common_Test_Set_for_Allosteric_Site_Prediction_Tools.ipynb
-This notebook removes the proteins idenfitied by the notebook with prefix 02 from the proteins in the dataset obtained using notebook with predic 01.
+### 3. Run the AlloBench
+The easiest way is to run the entire notebook is to select:
 
-Running the notebooks with prefixes 01, 02, and 03 in succession produces the test set without data leaks to benckmark exisinting allsoteric site prediction tools
+Kernel > Restart Kernel and Run All Cells...
 
-## ASD_orthosteric_site.ipynb
-Alternatively, the ASD provides a dataset of proteins with both allosteric and active site reisdues. However, this set is significantly smaller than the one obtained above. This notebook fetches the allosteric and orthosteric residues from ASD.
+Please refer the [JupyterLab User Guide](https://jupyterlab.readthedocs.io/en/latest/getting_started/overview.html) if you encounter any issues
+
+## Output
+
+### Files
+* **AlloBench.csv** - The unfiltered AlloBench dataset with allosteic and active site residues
+* **ASD_Updated.csv** - The ASD data after updating obsolete PDB and UniProt IDs
+* **ASD_Enriched.csv** - The ASD data complemented by additional information from UniProt and PDB
+
+### Directories
+* **pdb_structures** - Directory containing downloaded PDB structures

@@ -1,8 +1,9 @@
+biopython >= 1.79
 jupyterlab
-numpy
 matplotlib-venn
+more-itertools
+numpy
 pandas
+SPARQLWrapper
 tqdm
 xmltodict
-SPARQLWrapper
-biopython >= 1.79
