@@ -85,14 +85,23 @@ def parse_asd_xml(xml_string: str) -> tuple:
     return output
 
 
-def asd_to_df(asd_xml_archive):
+def asd_to_df(xml_directory):
+    """
+    Parse XML files from a directory instead of a tar.gz archive
+    """
     asd_data = []
-    with tarfile.open(asd_xml_archive, 'r:gz') as tar_data:
-        for xml_file in tar_data:
-            xml_data = tar_data.extractfile(xml_file)
-            if xml_data is not None:
-                xml_string = xml_data.read().decode("utf-8")
+    xml_files = glob.glob(os.path.join(xml_directory, "*.xml"))
+    
+    print(f"Found {len(xml_files)} XML files in {xml_directory}")
+    
+    for xml_file_path in xml_files:
+        try:
+            with open(xml_file_path, 'r', encoding='utf-8') as xml_file:
+                xml_string = xml_file.read()
                 asd_data.extend(parse_asd_xml(xml_string))
+        except Exception as e:
+            print(f"Error processing {xml_file_path}: {e}")
+            continue
 
     return pd.DataFrame(asd_data, columns=[
         'Protein ASD ID',
